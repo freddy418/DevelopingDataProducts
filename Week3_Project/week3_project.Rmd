@@ -1,0 +1,25 @@
+---
+title: "R Markdown with Plotly"
+author: "Daniel Deng"
+date: '`r format(Sys.time(), "%d %B, %Y")`'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This document shows the number of COVID-19 cases by zip code of residence of Santa Clara County:
+
+```{r echo=TRUE}
+suppressPackageStartupMessages(library(plotly))
+data_file = "sc_cases_by_zipcode.csv"
+if (!file.exists(data_file)) {
+  download.file('https://data.sccgov.org/api/views/j2gj-bg6c/rows.csv?accessType=DOWNLOAD', data_file)
+}
+d <- read.csv(data_file)
+d$zipcode <- as.character(d$zipcode)
+plot_ly(d, x=d$zipcode, y=d$Cases, type="bar")
+```
